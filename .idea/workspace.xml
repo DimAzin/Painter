@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c5e62f25-f9af-4236-91fb-fefe3579f90b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Readme.md" beforeDir="false" afterPath="$PROJECT_DIR$/Readme.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -96,11 +97,28 @@
       <option name="project" value="LOCAL" />
       <updated>1735118034268</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="В.2 Ластик">
+      <option name="closed" value="true" />
+      <created>1735838311652</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1735838311652</updated>
+    </task>
+    <task id="LOCAL-00005" summary="В.2 Ластик">
+      <option name="closed" value="true" />
+      <created>1735838426735</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1735838426735</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="В.1 Рисовалка" />
-    <option name="LAST_COMMIT_MESSAGE" value="В.1 Рисовалка" />
+    <MESSAGE value="В.2 Ластик" />
+    <option name="LAST_COMMIT_MESSAGE" value="В.2 Ластик" />
   </component>
 </project>

@@ -19,10 +19,11 @@ class DrawingApp:
         self.last_x, self.last_y = None, None
         self.pen_color = 'black'
         self.brush_size = 1
-        self.previous_color = None  # Для хранения предыдущего цвета кисти
 
         self.canvas.bind('<B1-Motion>', self.paint)
         self.canvas.bind('<ButtonRelease-1>', self.reset)
+        self.canvas.bind('<Button-3>', self.pick_color)  # Привязываем действие пипетки
+
 
     def setup_ui(self):
         control_frame = tk.Frame(self.root)
@@ -90,6 +91,14 @@ class DrawingApp:
         if self.previous_color is not None:
             self.pen_color = self.previous_color
 
+    def pick_color(self, event):
+        # Получаем координаты клика
+        x, y = event.x, event.y
+        try:
+            # Получаем цвет пикселя и устанавливаем его как цвет кисти
+            self.pen_color = "#%02x%02x%02x" % self.image.getpixel((x, y))
+        except IndexError:
+            messagebox.showerror("Ошибка", "Координаты за пределами изображения.")
 
 def main():
     root = tk.Tk()
