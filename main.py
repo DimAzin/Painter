@@ -24,6 +24,10 @@ class DrawingApp:
         self.canvas.bind('<ButtonRelease-1>', self.reset)
         self.canvas.bind('<Button-3>', self.pick_color)  # Привязываем действие пипетки
 
+        # Привязываем горячие клавиши
+        self.root.bind('<Control-s>', self.save_image)
+        self.root.bind('<Control-c>', self.choose_color)
+
 
     def setup_ui(self):
         control_frame = tk.Frame(self.root)
@@ -67,10 +71,10 @@ class DrawingApp:
         self.image = Image.new("RGB", (600, 400), "white")
         self.draw = ImageDraw.Draw(self.image)
 
-    def choose_color(self):
+    def choose_color(self, event=None):
         self.pen_color = colorchooser.askcolor(color=self.pen_color)[1]
 
-    def save_image(self):
+    def save_image(self, event=None):
         file_path = filedialog.asksaveasfilename(filetypes=[('PNG files', '*.png')])
         if file_path:
             if not file_path.endswith('.png'):
