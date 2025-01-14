@@ -8,6 +8,9 @@ class DrawingApp:
         self.root = root
         self.root.title("Рисовалка с сохранением в PNG")
 
+        self.pen_color = 'black'  # Перенос инициализации выше
+        self.brush_size = 1
+
         self.image = Image.new("RGB", (600, 400), "white")
         self.draw = ImageDraw.Draw(self.image)
 
@@ -17,8 +20,6 @@ class DrawingApp:
         self.setup_ui()
 
         self.last_x, self.last_y = None, None
-        self.pen_color = 'black'
-        self.brush_size = 1
 
         self.canvas.bind('<B1-Motion>', self.paint)
         self.canvas.bind('<ButtonRelease-1>', self.reset)
@@ -27,7 +28,6 @@ class DrawingApp:
         # Привязываем горячие клавиши
         self.root.bind('<Control-s>', self.save_image)
         self.root.bind('<Control-c>', self.choose_color)
-
 
     def setup_ui(self):
         control_frame = tk.Frame(self.root)
@@ -42,15 +42,15 @@ class DrawingApp:
         save_button = tk.Button(control_frame, text="Сохранить", command=self.save_image)
         save_button.pack(side=tk.LEFT)
 
-        # Кнопка "Ластик"
-        eraser_button = tk.Button(control_frame, text="Ластик", command=self.use_eraser)
-        eraser_button.pack(side=tk.LEFT)
-
         # Добавляем выпадающий список для выбора размера кисти
         sizes = [1, 2, 5, 10]
         self.brush_size_var = tk.IntVar(value=sizes[0])
         brush_size_menu = tk.OptionMenu(control_frame, self.brush_size_var, *sizes, command=self.update_brush_size)
         brush_size_menu.pack(side=tk.LEFT)
+
+        # Предварительный просмотр цвета кисти
+        self.color_preview = tk.Label(control_frame, text="", bg=self.pen_color, width=3, height=1, relief=tk.SUNKEN)
+        self.color_preview.pack(side=tk.LEFT, padx=5)
 
     def paint(self, event):
         if self.last_x and self.last_y:
@@ -72,7 +72,10 @@ class DrawingApp:
         self.draw = ImageDraw.Draw(self.image)
 
     def choose_color(self, event=None):
-        self.pen_color = colorchooser.askcolor(color=self.pen_color)[1]
+        color = colorchooser.askcolor(color=self.pen_color)[1]
+        if color:
+            self.pen_color = color
+            self.update_color_preview()
 
     def save_image(self, event=None):
         file_path = filedialog.asksaveasfilename(filetypes=[('PNG files', '*.png')])
@@ -85,24 +88,20 @@ class DrawingApp:
     def update_brush_size(self, size):
         self.brush_size = self.brush_size_var.get()
 
-    def use_eraser(self):
-        """Устанавливает цвет кисти на фон для использования как ластика."""
-        self.previous_color = self.pen_color  # Сохраняем текущий цвет кисти
-        self.pen_color = "white"  # Меняем цвет кисти на цвет фона
-
-    def switch_to_brush(self):
-        """Восстанавливает предыдущий цвет кисти."""
-        if self.previous_color is not None:
-            self.pen_color = self.previous_color
-
     def pick_color(self, event):
         # Получаем координаты клика
         x, y = event.x, event.y
         try:
             # Получаем цвет пикселя и устанавливаем его как цвет кисти
             self.pen_color = "#%02x%02x%02x" % self.image.getpixel((x, y))
+            self.update_color_preview()
         except IndexError:
             messagebox.showerror("Ошибка", "Координаты за пределами изображения.")
+
+    def update_color_preview(self):
+        """Обновляет цвет предварительного просмотра кисти."""
+        self.color_preview.config(bg=self.pen_color)
+
 
 def main():
     root = tk.Tk()
