@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import colorchooser, filedialog, messagebox
+from tkinter import colorchooser, filedialog, messagebox, simpledialog
 from PIL import Image, ImageDraw
 
 
@@ -8,13 +8,16 @@ class DrawingApp:
         self.root = root
         self.root.title("Рисовалка с сохранением в PNG")
 
-        self.pen_color = 'black'  # Перенос инициализации выше
+        self.pen_color = 'black'
         self.brush_size = 1
 
-        self.image = Image.new("RGB", (600, 400), "white")
+        self.canvas_width = 600
+        self.canvas_height = 400
+
+        self.image = Image.new("RGB", (self.canvas_width, self.canvas_height), "white")
         self.draw = ImageDraw.Draw(self.image)
 
-        self.canvas = tk.Canvas(root, width=600, height=400, bg='white')
+        self.canvas = tk.Canvas(root, width=self.canvas_width, height=self.canvas_height, bg='white')
         self.canvas.pack()
 
         self.setup_ui()
@@ -52,6 +55,10 @@ class DrawingApp:
         self.color_preview = tk.Label(control_frame, text="", bg=self.pen_color, width=3, height=1, relief=tk.SUNKEN)
         self.color_preview.pack(side=tk.LEFT, padx=5)
 
+        # Добавляем кнопку для изменения размера холста
+        resize_button = tk.Button(control_frame, text="Изменить размер холста", command=self.resize_canvas)
+        resize_button.pack(side=tk.LEFT, padx=5)
+
     def paint(self, event):
         if self.last_x and self.last_y:
             self.canvas.create_line(self.last_x, self.last_y, event.x, event.y,
@@ -68,7 +75,7 @@ class DrawingApp:
 
     def clear_canvas(self):
         self.canvas.delete("all")
-        self.image = Image.new("RGB", (600, 400), "white")
+        self.image = Image.new("RGB", (self.canvas_width, self.canvas_height), "white")
         self.draw = ImageDraw.Draw(self.image)
 
     def choose_color(self, event=None):
@@ -101,6 +108,24 @@ class DrawingApp:
     def update_color_preview(self):
         """Обновляет цвет предварительного просмотра кисти."""
         self.color_preview.config(bg=self.pen_color)
+
+    def resize_canvas(self):
+        """Изменяет размер холста и изображения."""
+        new_width = simpledialog.askinteger("Изменить ширину", "Введите новую ширину:", initialvalue=self.canvas_width)
+        new_height = simpledialog.askinteger("Изменить высоту", "Введите новую высоту:", initialvalue=self.canvas_height)
+
+        if new_width and new_height:
+            self.canvas_width = new_width
+            self.canvas_height = new_height
+
+            # Обновляем холст
+            self.canvas.config(width=self.canvas_width, height=self.canvas_height)
+
+            # Создаём новое изображение
+            self.image = Image.new("RGB", (self.canvas_width, self.canvas_height), "white")
+            self.draw = ImageDraw.Draw(self.image)
+
+            self.clear_canvas()
 
 
 def main():
