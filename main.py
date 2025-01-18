@@ -59,6 +59,14 @@ class DrawingApp:
         resize_button = tk.Button(control_frame, text="Изменить размер холста", command=self.resize_canvas)
         resize_button.pack(side=tk.LEFT, padx=5)
 
+        # Добавляем кнопку для добавления текста
+        text_button = tk.Button(control_frame, text="Текст", command=self.add_text)
+        text_button.pack(side=tk.LEFT, padx=5)
+
+        # Добавляем кнопку для изменения цвета фона
+        bg_button = tk.Button(control_frame, text="Изменить фон", command=self.change_background)
+        bg_button.pack(side=tk.LEFT, padx=5)
+
     def paint(self, event):
         if self.last_x and self.last_y:
             self.canvas.create_line(self.last_x, self.last_y, event.x, event.y,
@@ -127,6 +135,25 @@ class DrawingApp:
 
             self.clear_canvas()
 
+    def add_text(self):
+        """Добавляет текст на изображение."""
+        text = simpledialog.askstring("Добавить текст", "Введите текст:")
+        if text:
+            self.canvas.bind('<Button-1>', lambda event: self.place_text(event, text))
+
+    def place_text(self, event, text):
+        """Размещает текст на холсте и изображении."""
+        x, y = event.x, event.y
+        self.canvas.create_text(x, y, text=text, fill=self.pen_color, font=("Arial", 12))
+        self.draw.text((x, y), text, fill=self.pen_color)
+        self.canvas.unbind('<Button-1>')
+
+    def change_background(self):
+        """Изменяет цвет фона холста."""
+        color = colorchooser.askcolor(title="Выберите цвет фона")[1]
+        if color:
+            self.canvas.config(bg=color)
+
 
 def main():
     root = tk.Tk()
@@ -136,3 +163,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
